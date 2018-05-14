@@ -76,14 +76,22 @@ public class Main : MonoBehaviour {
 		GUIStyle style = new GUIStyle ();
 		style.fontSize = 36;
 		style.normal.textColor = Color.white;
-		Rect scoreArea = new Rect (0, 0, 100, 100);
-		Rect levelArea = new Rect (0, 150, 100, 100);
-		Rect timeArea = new Rect (Screen.width - 200, 0, 10, 10);
-		Rect answerArea = new Rect (1100, 350, 10, 10);
-		GUI.Label (scoreArea, "Score: " + score, style);
-		GUI.Label (levelArea, "Level: " + level, style);
-		GUI.Label (timeArea, "Time: " + time, style);
-		GUI.Label (answerArea, "Answer:  " + answer, style);
+		Rect scoreArea = new Rect (10, 0, 100, 100);
+		Rect scoreAreaNumber = new Rect (10, 50, 100, 100);
+		Rect levelArea = new Rect (10, Screen.height - 100, 100, 100);
+		Rect levelAreaNumber = new Rect (10, Screen.height - 50, 100, 100);
+		Rect timeArea = new Rect (Screen.width - 150, 0, 10, 10);
+		Rect timeAreaNumber = new Rect (Screen.width - 150, 50, 10, 10);
+		Rect answerArea = new Rect (Screen.width - 150, Screen.height - 100, 10, 10);
+		Rect answerAreaNumber = new Rect (Screen.width - 150, Screen.height - 50, 10, 10);
+		GUI.Label (scoreArea, "Score", style);
+		GUI.Label (scoreAreaNumber, "" + score, style);
+		GUI.Label (levelArea, "Level", style);
+		GUI.Label (levelAreaNumber, "" + level, style);
+		GUI.Label (timeArea, "Time", style);
+		GUI.Label (timeAreaNumber,"" +  Mathf.Round(time), style);
+		GUI.Label (answerArea, "Answer", style);
+		GUI.Label (answerAreaNumber, "" + answer, style);
 	}
 
 	string CreateQuestion(bool correctQuestion) {

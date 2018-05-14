@@ -15,7 +15,7 @@ namespace Con
 		public const int CONSECUTIVE_POSITIVE = 3;
 		public const int CONSECUTIVE_NEGATIVE = -3;
 		public const float VELOCITY_MIN = 1.0f;
-		public const float VELOCITY_MAX = 5.0f;
+		public const float VELOCITY_MAX = 3.0f;
 		public const float SMALLEST_SHAPE_SIZE = 1.0f;
 		public const float LARGEST_SHAPE_SIZE = 3.0f;
 		//public const Color[] COLORS = new Color[] { Color.blue, Color.green, Color.yellow, Color.red };
