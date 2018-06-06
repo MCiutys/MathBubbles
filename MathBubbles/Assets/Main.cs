@@ -52,7 +52,7 @@ public class Main : MonoBehaviour {
 			GameObject shape = (GameObject) Instantiate(Resources.Load("Circle"), new Vector3(i * 4, 0, 0), Quaternion.identity);
 			ShapeScript script = shape.GetComponent<ShapeScript> ();
 			script.UploadColor (colors [rand.Next(colors.Length)]);
-			script.UploadPosition (rand.Next (Screen.width), rand.Next (Screen.height));
+			script.UploadPosition ((int) (0.2 + rand.NextDouble () * Screen.width * 0.8), rand.Next (Screen.height));
 			script.UpdateEquation (CreateQuestion (correctEq));
 			if (i == 0) {
 				script.UpdateCorrectOrNot (true);	
@@ -108,7 +108,7 @@ public class Main : MonoBehaviour {
 	}
 
 	int GenerateWrongNumber(int original) {
-		return original += rand.Next (-3, 3);
+		return original += rand.Next (0, 3);
 	}
 
 	string GenerateFirstLevelQuestion(bool correctQuestion) {
@@ -132,11 +132,11 @@ public class Main : MonoBehaviour {
 		}
 
 		if (!correctQuestion) {
-			int modifyFirstBy = rand.Next (-1, 3);
-			int modifySecondBy = rand.Next (-1, 3);
+			int modifyFirstBy = rand.Next (0, 3);
+			int modifySecondBy = rand.Next (0, 3);
 
 			while (modifySecondBy == modifyFirstBy) {
-				modifySecondBy = rand.Next (-1, 3);
+				modifySecondBy = rand.Next (0, 3);
 			}
 
 			first += modifyFirstBy;

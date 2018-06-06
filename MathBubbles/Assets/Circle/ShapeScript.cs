@@ -11,6 +11,7 @@ public class ShapeScript : MonoBehaviour {
 	private bool right, up;
 	private string equation;
 	private bool correct;
+	private int fontSize;
 	private Rect textArea;
 	private GUIStyle style;
 	private GUIContent content;
@@ -30,6 +31,8 @@ public class ShapeScript : MonoBehaviour {
 		temp.y = floatRandom;
 		transform.localScale = temp;
 		textArea = new Rect (5, 5, GetComponent<SpriteRenderer> ().bounds.size.x, GetComponent<SpriteRenderer> ().bounds.size.y);
+		fontSize = (int) GetComponent<SpriteRenderer> ().bounds.size.x * 20;
+		Debug.Log (GetComponent<SpriteRenderer> ().bounds.size.x);
 
 		if (random.Next (2) == 0) {
 			right = true;
@@ -75,7 +78,7 @@ public class ShapeScript : MonoBehaviour {
 	void OnGUI() {
 		style = new GUIStyle ();
 		content = new GUIContent (equation);
-		style.fontSize = 20;
+		style.fontSize = fontSize;
 
 		Vector2 tempRect = GetComponent<Rigidbody2D> ().position;
 		tempRect.x = Mathf.Round (tempRect.x * 100f) / 100f;
