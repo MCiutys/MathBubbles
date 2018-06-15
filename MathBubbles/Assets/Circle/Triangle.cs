@@ -4,4 +4,7 @@ using UnityEngine;
 
 public class Triangle : Shape {
 
+	public Triangle() {
+
+	}
 }

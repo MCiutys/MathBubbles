@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public abstract class Equation {
+public class Equation {
 	private List<int> numbers;
 	private char sign;
 	private int answer;
@@ -10,7 +10,6 @@ public abstract class Equation {
 	public Equation() {
 		numbers = new List<int>();
 		sign = '+';
-
 	}
 
 	public Equation(char s, bool correctOrNot) {

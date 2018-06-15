@@ -52,7 +52,11 @@ public class Main : MonoBehaviour {
 			GameObject shape = (GameObject) Instantiate(Resources.Load("Circle"), new Vector3(i * 4, 0, 0), Quaternion.identity);
 			ShapeScript script = shape.GetComponent<ShapeScript> ();
 			script.UploadColor (colors [rand.Next(colors.Length)]);
-			script.UploadPosition ((int) (0.2 + rand.NextDouble () * Screen.width * 0.8), rand.Next (Screen.height));
+			double x = 0.4 * rand.NextDouble () + 0.3;
+			double y = rand.NextDouble ();
+			//Debug.Log ("Height: " + Screen.height);
+			//Debug.Log ("Width: " + Screen.width);
+			script.UploadPosition (x, y);
 			script.UpdateEquation (CreateQuestion (correctEq));
 			if (i == 0) {
 				script.UpdateCorrectOrNot (true);	

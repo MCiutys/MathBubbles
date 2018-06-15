@@ -32,7 +32,7 @@ public class ShapeScript : MonoBehaviour {
 		transform.localScale = temp;
 		textArea = new Rect (5, 5, GetComponent<SpriteRenderer> ().bounds.size.x, GetComponent<SpriteRenderer> ().bounds.size.y);
 		fontSize = (int) GetComponent<SpriteRenderer> ().bounds.size.x * 20;
-		Debug.Log (GetComponent<SpriteRenderer> ().bounds.size.x);
+		//Debug.Log (GetComponent<SpriteRenderer> ().bounds.size.x);
 
 		if (random.Next (2) == 0) {
 			right = true;
@@ -59,11 +59,16 @@ public class ShapeScript : MonoBehaviour {
 		//renderer.sprite = sprite;
 	}
 
-	public void UploadPosition(int x, int y) {
+	public void UploadPosition(double x, double y) {
 		Vector2 temp = GetComponent<Rigidbody2D> ().position;
-		temp.x = x;
-		temp.y = y;
-		GetComponent<Rigidbody2D>().position = Camera.main.ScreenToWorldPoint(temp);
+		temp.x = (float) x;
+		temp.y = (float) y;
+		Debug.Log ("X: " + x);
+		if (x < 500 && x > 1000) {
+			Debug.Log ("LARGEEEER: " + x);
+		}
+		Debug.Log ("Y: " + y);
+		GetComponent<Rigidbody2D>().position = Camera.main.ViewportToWorldPoint(temp);
 	}
 
 	public void UpdateEquation(string eq) {
