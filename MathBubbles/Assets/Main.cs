@@ -59,6 +59,11 @@ public class Main : MonoBehaviour {
 			script.UploadPosition (x, y);
 			script.UpdateEquation (CreateQuestion (correctEq));
 			if (i == 0) {
+				script.UpdateEq(new Equation (level, true, int.Parse(answer)));
+			} else {
+				script.UpdateEq(new Equation (level, false, int.Parse(answer)));
+			}
+			if (i == 0) {
 				script.UpdateCorrectOrNot (true);	
 				correctEq = false;
 			} else {

@@ -15,6 +15,7 @@ public class ShapeScript : MonoBehaviour {
 	private Rect textArea;
 	private GUIStyle style;
 	private GUIContent content;
+	public Equation eq;
 
 	System.Random random;
 
@@ -63,16 +64,15 @@ public class ShapeScript : MonoBehaviour {
 		Vector2 temp = GetComponent<Rigidbody2D> ().position;
 		temp.x = (float) x;
 		temp.y = (float) y;
-		Debug.Log ("X: " + x);
-		if (x < 500 && x > 1000) {
-			Debug.Log ("LARGEEEER: " + x);
-		}
-		Debug.Log ("Y: " + y);
 		GetComponent<Rigidbody2D>().position = Camera.main.ViewportToWorldPoint(temp);
 	}
 
-	public void UpdateEquation(string eq) {
-		equation = eq;
+	public void UpdateEquation(string e) {
+		equation = e;
+	}
+
+	public void UpdateEq(Equation e) {
+		eq = e;
 	}
 
 	public void UpdateCorrectOrNot(bool c) {
@@ -82,7 +82,7 @@ public class ShapeScript : MonoBehaviour {
 
 	void OnGUI() {
 		style = new GUIStyle ();
-		content = new GUIContent (equation);
+		content = new GUIContent (eq.ToString());
 		style.fontSize = fontSize;
 
 		Vector2 tempRect = GetComponent<Rigidbody2D> ().position;

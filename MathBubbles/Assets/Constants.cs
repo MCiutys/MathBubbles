@@ -19,6 +19,7 @@ namespace Con
 		public const float SMALLEST_SHAPE_SIZE = 1.0f;
 		public const float LARGEST_SHAPE_SIZE = 3.0f;
 		//public const Color[] COLORS = new Color[] { Color.blue, Color.green, Color.yellow, Color.red };
+		public static readonly char[] SIGNS = {'+', '-', '*', '/'};
 
 		// Provides a number of questions for a particular level
 		public static int GetNumberOfQuestions(int level) {
