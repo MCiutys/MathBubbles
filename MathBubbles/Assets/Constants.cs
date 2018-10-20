@@ -12,14 +12,22 @@ namespace Con
 		public const int LEVEL2_MAX = 50;
 		public const int LEVEL3_MIN = 51;
 		public const int LEVEL3_MAX = 100;
+		public static int[,] LEVEL_MIN_MAX = { { 5, 16 }, { 16, 50 }, { 51, 100 }, { 100, 200 }, { 200, 400 } };
+		public static int[,] LEVEL_INCORRECTNESS = { { 1, 2 }, { 2, 4 }, { 4, 8 }, { 8, 16 }, { 16, 32 } };
 		public const int CONSECUTIVE_POSITIVE = 3;
 		public const int CONSECUTIVE_NEGATIVE = -3;
 		public const float VELOCITY_MIN = 1.0f;
 		public const float VELOCITY_MAX = 3.0f;
 		public const float SMALLEST_SHAPE_SIZE = 1.0f;
-		public const float LARGEST_SHAPE_SIZE = 3.0f;
+		public const float LARGEST_SHAPE_SIZE = 2.0f;
+		public const char ROOT = '\u221A';
+		public const char SQUARE = '\xB2';
 		//public const Color[] COLORS = new Color[] { Color.blue, Color.green, Color.yellow, Color.red };
-		public static readonly char[] SIGNS = {'+', '-', '*', '/'};
+		public static readonly char[] SIGNS = {'+', '-', '*', '/', ROOT, SQUARE};
+		public static readonly string TRIANGLE_SPRITE = "Triangle";
+		public static readonly string SQUARE_SPRITE = "Square";
+		public static readonly string CIRCLE_SPRITE = "Circle";
+		public static readonly string[] SPRITE_NAMES = { TRIANGLE_SPRITE, SQUARE_SPRITE, CIRCLE_SPRITE };
 
 		// Provides a number of questions for a particular level
 		public static int GetNumberOfQuestions(int level) {

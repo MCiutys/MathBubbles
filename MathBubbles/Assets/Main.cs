@@ -33,43 +33,65 @@ public class Main : MonoBehaviour {
 		CreateShapes ();
 	}
 
-	void CreateShapes() {
-		bool correctEq = true;
+	private double[] GetRandomPositions() {
+		double x = 0.4 * rand.NextDouble () + 0.3;
+		double y = rand.NextDouble ();
+		double[] pos = new double[2];
+		pos [0] = x;
+		pos [1] = y;
+		return pos;
+	}
 
-		switch (level) {
-		case 1: 
-			answer = GenerateFirstLevelAnswer ().ToString ();
-			break;
-		case 2:
-			answer = GenerateSecondLevelAnswer ().ToString ();
-			break;
-		case 3:
-			answer = GenerateThirdLevelAnswer ().ToString ();
-			break;
+	// Checks if new position passes requirements
+	private bool IsNewPositionValid(double[,] positions, double[] newPos) {
+		//Debug.Log ("Inside check new position");
+		for (int i = 0; i < positions.GetLength (0); i++) {
+			double diff1 = Mathf.Abs ((float) (positions [i, 0] - newPos [0]));
+			double diff2 = Mathf.Abs ((float) (positions [i, 1] - newPos [1]));
+
+			if (diff1 < 0.2 && diff2 < 0.2)
+				return false;
 		}
+		return true;
+	}
 
-		for (int i = 0; i < Con.Constants.GetNumberOfQuestions(level); i++) {
+	void CreateShapes() {
+
+		answer = GenerateAnswer (level).ToString ();
+			
+		int numberOfShapes = Con.Constants.GetNumberOfQuestions (level);
+		double[,] positions = new double[numberOfShapes,2];
+
+
+
+		for (int i = 0; i < numberOfShapes; i++) {
 			GameObject shape = (GameObject) Instantiate(Resources.Load("Circle"), new Vector3(i * 4, 0, 0), Quaternion.identity);
 			ShapeScript script = shape.GetComponent<ShapeScript> ();
 			script.UploadColor (colors [rand.Next(colors.Length)]);
-			double x = 0.4 * rand.NextDouble () + 0.3;
-			double y = rand.NextDouble ();
-			//Debug.Log ("Height: " + Screen.height);
-			//Debug.Log ("Width: " + Screen.width);
-			script.UploadPosition (x, y);
-			script.UpdateEquation (CreateQuestion (correctEq));
-			if (i == 0) {
-				script.UpdateEq(new Equation (level, true, int.Parse(answer)));
-			} else {
-				script.UpdateEq(new Equation (level, false, int.Parse(answer)));
+
+			script.UploadSprite (Con.Constants.SPRITE_NAMES[rand.Next (Con.Constants.SPRITE_NAMES.GetLength(0))]);
+
+			double[] newPos = new double[2];
+			newPos = GetRandomPositions ();
+
+			while (!IsNewPositionValid(positions, newPos)) {
+				newPos = GetRandomPositions ();
 			}
+
+
+			positions [i, 0] = newPos [0];
+			positions [i, 1] = newPos [1];
+
+			script.UploadPosition (newPos [0], newPos [1]);
+
 			if (i == 0) {
-				script.UpdateCorrectOrNot (true);	
-				correctEq = false;
+				script.UpdateEqu(level, true, int.Parse(answer));
 			} else {
-				script.UpdateCorrectOrNot (false);
+				script.UpdateEqu(level, false, int.Parse(answer));
 			}
+				
 			shapes.Add (shape);
+			Debug.Log ("Create shapes method finished");
 		}
 	}
 
@@ -103,176 +125,6 @@ public class Main : MonoBehaviour {
 		GUI.Label (answerAreaNumber, "" + answer, style);
 	}
 
-	string CreateQuestion(bool correctQuestion) {
-
-		switch (level) {
-		case 1:
-			return GenerateFirstLevelQuestion (correctQuestion);
-		case 2:
-			return GenerateSecondLevelQuestion (correctQuestion);
-		case 3:
-			return GenerateThirdLevelQuestion (correctQuestion);
-		}
-		return "";
-	}
-
-	int GenerateWrongNumber(int original) {
-		return original += rand.Next (0, 3);
-	}
-
-	string GenerateFirstLevelQuestion(bool correctQuestion) {
-		char sign;
-		// Generate sign of the equation
-		if (rand.Next (2) == 0) {
-			sign = '+';
-		} else {
-			sign = '-';
-		}
-
-		int first, second;
-		int ans = int.Parse (answer);
-
-		if (sign == '-') {
-			first = rand.Next (ans, Con.Constants.LEVEL1_MAX);
-			second = Mathf.Abs(ans - first); 
-		} else {
-			first = rand.Next (Con.Constants.LEVEL1_MIN, ans);
-			second = ans - first;
-		}
-
-		if (!correctQuestion) {
-			int modifyFirstBy = rand.Next (0, 3);
-			int modifySecondBy = rand.Next (0, 3);
-
-			while (modifySecondBy == modifyFirstBy) {
-				modifySecondBy = rand.Next (0, 3);
-			}
-
-			first += modifyFirstBy;
-			second += modifySecondBy;
-		} 
-
-		return "" + first + sign + second;
-	}
-
-	string GenerateSecondLevelQuestion(bool correctQuestion) {
-		char sign = '+';
-		string final;
-		int random = rand.Next (3);
-		switch (random) {
-		case 0:
-			sign = '+';
-			break;
-		case 1:
-			sign = '-';
-			break;
-		case 2:
-			sign = '*';
-			break;
-		}
-
-		int first, second;
-		int ans = int.Parse (answer);
-
-		if (sign == '+') {
-			first = rand.Next (Con.Constants.LEVEL2_MIN, ans);
-			second = ans - first;
-		} else if (sign == '-') {
-			first = rand.Next (ans, Con.Constants.LEVEL2_MAX);
-			second = Mathf.Abs (ans - first);
-		} else {
-			if (!Con.Constants.IsNotPrime (ans)) {
-				first = ans;
-				second = 1;
-			} else {
-				first = Con.Constants.Divide (ans);
-				second = ans / first;
-			}
-		}
-
-		final = "" + first + sign + second;
-
-		if (!correctQuestion) {
-			int changeFirst = GenerateWrongNumber (first);
-			int changeSecond = GenerateWrongNumber (second);
-
-			if (changeFirst == changeSecond) {
-				changeSecond = GenerateWrongNumber (second);
-			}
-
-			first += changeFirst;
-			second += changeSecond;
-			final = "" + first + sign + second + "INC";
-		}
-
-		return final;
-	}
-
-	string GenerateThirdLevelQuestion(bool correctQuestion) {
-		char sign = '+';
-		string final;
-		int random = rand.Next (3);
-		switch (random) {
-		case 0:
-			sign = '+';
-			break;
-		case 1:
-			sign = '-';
-			break;
-		case 2:
-			sign = '*';
-			break;
-		case 3:
-			sign = '/';
-			break;
-		}
-
-		int first, second;
-		int ans = int.Parse (answer);
-
-		if (sign == '+') {
-			first = rand.Next (Con.Constants.LEVEL3_MIN, ans);
-			second = ans - first;
-		} else if (sign == '-') {
-			first = rand.Next (ans, Con.Constants.LEVEL3_MAX);
-			second = Mathf.Abs (ans - first);
-		} else if (sign == '*') {
-			if (!Con.Constants.IsNotPrime (ans)) {
-				first = ans;
-				second = 1;
-			} else {
-				first = Con.Constants.Divide (ans);
-				second = ans / first;
-			}
-		} else {
-			if (!Con.Constants.IsNotPrime (ans)) {
-				first = ans;
-				second = 1;
-			} else {
-				int multiplier = rand.Next (2, 5);
-				first = multiplier * ans;
-				second = first / ans;
-			}
-		}
-
-		final = "" + first + sign + second;
-
-		if (!correctQuestion) {
-			int changeFirst = GenerateWrongNumber (first);
-			int changeSecond = GenerateWrongNumber (second);
-
-			if (changeFirst == changeSecond) {
-				changeSecond = GenerateWrongNumber (second);
-			}
-
-			first += changeFirst;
-			second += changeSecond;
-			final = "" + first + sign + second + "INC";
-		}
-
-		return final;
-	}
-	
 	// Update is called once per frame
 	void Update () {
 		time -= Time.deltaTime;
@@ -283,21 +135,29 @@ public class Main : MonoBehaviour {
 
 		CheckForHits ();
 	}
+
+	int GenerateAnswer(int level) {
+		return rand.Next (Con.Constants.LEVEL_MIN_MAX [level - 1, 0], Con.Constants.LEVEL_MIN_MAX [level - 1, 1]);
+	}
 		
 
 	// First level answer is between 5 and 15
-	int GenerateFirstLevelAnswer() {
-		return rand.Next (Con.Constants.LEVEL1_MIN, Con.Constants.LEVEL1_MAX);
+	/*int GenerateFirstLevelAnswer() {
+		return rand.Next (Con.Constants.LEVEL_MIN_MAX[0, 0], Con.Constants.LEVEL_MIN_MAX[0, 1]);
 	}
 
 	// Second level answer is between 15 and 30
 	int GenerateSecondLevelAnswer() {
-		return rand.Next (Con.Constants.LEVEL2_MIN, Con.Constants.LEVEL2_MAX);
+		return rand.Next (Con.Constants.LEVEL_MIN_MAX[1, 0], Con.Constants.LEVEL_MIN_MAX[1, 1]);
 	}
 
 	int GenerateThirdLevelAnswer() {
-		return rand.Next (Con.Constants.LEVEL3_MIN, Con.Constants.LEVEL3_MAX);
+		return rand.Next (Con.Constants.LEVEL_MIN_MAX[2, 0], Con.Constants.LEVEL_MIN_MAX[2, 1]);
 	}
+
+	int GenerateFourthLevelAnswer() {
+		return rand.Next (Con.Constants.LEVEL_MIN_MAX[3, 0], Con.Constants.LEVEL_MIN_MAX[3, 1]);
+	}*/
 
 	void LevelUpOrDown(GameObject obj) {
 		if (obj.GetComponent<ShapeScript> ().IsCorrect()) {
@@ -325,11 +185,12 @@ public class Main : MonoBehaviour {
 			}
 			consecutive = 0;
 		}
-		Debug.Log ("Level: " + level);
+		Debug.Log ("Level Up or Down Finished");
 	}
 
 	void UpdateScore() {
 		score += 4 * level;
+		Debug.Log ("Update score finished");
 	}
 
 	void CheckForHits() {
